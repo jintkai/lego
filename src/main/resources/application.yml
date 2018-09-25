@@ -1,0 +1,15 @@
+#server
+server:
+  port: 10000
+  tomcat:
+    uri-encoding: utf-8
+
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/lego?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&useSSL=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+
+mybatis:
+   mapperLocations: classpath:/mapper/*.xml

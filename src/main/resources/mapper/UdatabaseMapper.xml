@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.legoweb.dao.UdatabaseMapper">
+    <resultMap id="BaseResultMap" type="com.legoweb.entity.Udatabase">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="db_name" jdbcType="VARCHAR" property="dbName"/>
+        <result column="db_type" jdbcType="VARCHAR" property="dbType"/>
+        <result column="db_url" jdbcType="VARCHAR" property="dbUrl"/>
+        <result column="db_user" jdbcType="VARCHAR" property="dbUser"/>
+        <result column="db_password" jdbcType="VARCHAR" property="dbPassword"/>
+        <result column="db_description" jdbcType="VARCHAR" property="dbDescription"/>
+        <result column="project_id" jdbcType="INTEGER" property="projectId"/>
+        <result column="project_Name" jdbcType="VARCHAR" property="projectName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    udatabase.id, db_name, db_type,db_url,db_user, db_password, db_description, project_id,project_name, udatabase.create_time, udatabase.update_time
+  </sql>
+    <sql id="selectWhere">
+        where 1=1
+        <if test="data !=null">
+            <if test="data.id !=null">
+                and id LIKE concat('%',#{data.id,jdbcType=INTEGER},'%')
+            </if>
+            <if test="data.dbName!=null">
+                and db_name LIKE concat('%',#{data.dbName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="data.dbType!=null">
+                and db_type = #{data.dbType,jdbcType=VARCHAR}
+            </if>
+            <if test="data.dbUrl!=null">
+                and db_url LIKE concat('%',#{data.dbUrl,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="data.dbUser!=null">
+                and db_user LIKE concat('%',#{data.dbUser,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="data.projectId!=null">
+                and project_id LIKE concat('%',#{data.projectId,jdbcType=INTEGER},'%')
+            </if>
+        </if>
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from udatabase left join project on udatabase.project_id = project.id
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from udatabase left join project on udatabase.project_id = project.id
+        <include refid="selectWhere"></include>
+        limit #{leftOffset,jdbcType=INTEGER},#{rightOffset,jdbcType=INTEGER};
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from udatabase
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.legoweb.entity.Udatabase">
+    insert into udatabase (id, db_name, db_user, 
+      db_password, db_description, project_id, db_type,db_url,
+      create_time, update_time)
+    values (#{id,jdbcType=INTEGER}, #{dbName,jdbcType=VARCHAR}, #{dbUser,jdbcType=VARCHAR}, 
+      #{dbPassword,jdbcType=VARCHAR}, #{dbDescription,jdbcType=VARCHAR}, #{projectId,jdbcType=INTEGER},
+      #{dbType,jdbcType=VARCHAR},#{dbUrl,jdbcType=VARCHAR},
+      now(),now())
+  </insert>
+    <insert id="insertSelective" parameterType="com.legoweb.entity.Udatabase">
+        insert into udatabase
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="dbName != null">
+                db_name,
+            </if>
+            <if test="dbUser != null">
+                db_user,
+            </if>
+            <if test="dbPassword != null">
+                db_password,
+            </if>
+            <if test="dbDescription != null">
+                db_description,
+            </if>
+            <if test="projectId != null">
+                project_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="dbName != null">
+                #{dbName,jdbcType=VARCHAR},
+            </if>
+            <if test="dbUser != null">
+                #{dbUser,jdbcType=VARCHAR},
+            </if>
+            <if test="dbPassword != null">
+                #{dbPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="dbDescription != null">
+                #{dbDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="projectId != null">
+                #{projectId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.legoweb.entity.Udatabase">
+        update udatabase
+        <set>
+            <if test="dbName != null">
+                db_name = #{dbName,jdbcType=VARCHAR},
+            </if>
+            <if test="dbUser != null">
+                db_user = #{dbUser,jdbcType=VARCHAR},
+            </if>
+            <if test="dbPassword != null">
+                db_password = #{dbPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="dbDescription != null">
+                db_description = #{dbDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="projectId != null">
+                project_id = #{projectId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.legoweb.entity.Udatabase">
+    update udatabase
+    set db_name = #{dbName,jdbcType=VARCHAR},
+      db_user = #{dbUser,jdbcType=VARCHAR},
+      db_password = #{dbPassword,jdbcType=VARCHAR},
+      db_description = #{dbDescription,jdbcType=VARCHAR},
+      project_id = #{projectId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

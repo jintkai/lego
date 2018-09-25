@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.legoweb.dao.ProjectMapper">
+    <resultMap id="BaseResultMap" type="com.legoweb.entity.Project">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="project_name" jdbcType="VARCHAR" property="projectName"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, project_name, status, description, create_time, update_time
+  </sql>
+    <sql id="selectWhere">
+        where 1=1
+        <if test="data !=null">
+            <if test="data.id !=null">
+                and id LIKE concat('%',#{data.id,jdbcType=INTEGER},'%')
+            </if>
+            <if test="data.projectName!=null">
+                and project_name LIKE concat('%',#{data.projectName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="data.status!=null">
+                and status = #{data.status,jdbcType=INTEGER}
+            </if>
+        </if>
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from project
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectProjects" resultMap="BaseResultMap" parameterType="com.legoweb.entity.PageCondition">
+        select
+        <include refid="Base_Column_List"/>
+        from project
+        <include refid="selectWhere"></include>
+        limit #{leftOffset,jdbcType=INTEGER},#{rightOffset,jdbcType=INTEGER};
+    </select>
+    <select id="selectCounts" resultType="java.lang.Integer" parameterType="com.legoweb.entity.PageCondition">
+        select count(1) from project
+        <include refid="selectWhere"></include>
+    </select>
+    <select id="uniqueProject" resultType="java.lang.Integer" parameterType="com.legoweb.entity.Project">
+        select count(1) from project where project_name = #{projectName,jdbcType=INTEGER}
+        <if test="id != null">
+            and id != #{id,jdbcType=INTEGER}
+        </if>
+    </select>
+    <select id="selectByNameOrId" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"></include>
+        from project
+        where id like  concat('%',#{key,jdbcType=VARCHAR},'%')
+        or project_name like  concat('%',#{key,jdbcType=VARCHAR},'%')
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from project
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.legoweb.entity.Project">
+    insert into project (id, project_name, status, 
+      description, create_time, update_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{projectName,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{description,jdbcType=VARCHAR}, now(),now()
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.legoweb.entity.Project">
+        insert into project
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="projectName != null">
+                project_name,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="projectName != null">
+                #{projectName,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.legoweb.entity.Project">
+        update project
+        <set>
+            <if test="projectName != null">
+                project_name = #{projectName,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.legoweb.entity.Project">
+    update project
+    set project_name = #{projectName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      description = #{description,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
