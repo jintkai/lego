@@ -17,7 +17,7 @@ public interface ProjectMapper {
 
     int uniqueProject(Project record);
 
-    Project selectByPrimaryKey(Integer id);
+    Project selectByPrimaryKey(String id);
 
     List<Project> selectByNameOrId(String key);
 

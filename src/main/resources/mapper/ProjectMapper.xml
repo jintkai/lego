@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.legoweb.dao.ProjectMapper">
     <resultMap id="BaseResultMap" type="com.legoweb.entity.Project">
-        <id column="id" jdbcType="INTEGER" property="id"/>
+        <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="project_name" jdbcType="VARCHAR" property="projectName"/>
         <result column="status" jdbcType="INTEGER" property="status"/>
         <result column="description" jdbcType="VARCHAR" property="description"/>
@@ -16,7 +16,7 @@
         where 1=1
         <if test="data !=null">
             <if test="data.id !=null">
-                and id LIKE concat('%',#{data.id,jdbcType=INTEGER},'%')
+                and id LIKE concat('%',#{data.id,jdbcType=VARCHAR},'%')
             </if>
             <if test="data.projectName!=null">
                 and project_name LIKE concat('%',#{data.projectName,jdbcType=VARCHAR},'%')
@@ -30,7 +30,7 @@
         select
         <include refid="Base_Column_List"/>
         from project
-        where id = #{id,jdbcType=INTEGER}
+        where id = #{id,jdbcType=VARCHAR}
     </select>
     <select id="selectProjects" resultMap="BaseResultMap" parameterType="com.legoweb.entity.PageCondition">
         select
@@ -46,7 +46,7 @@
     <select id="uniqueProject" resultType="java.lang.Integer" parameterType="com.legoweb.entity.Project">
         select count(1) from project where project_name = #{projectName,jdbcType=INTEGER}
         <if test="id != null">
-            and id != #{id,jdbcType=INTEGER}
+            and id != #{id,jdbcType=VARCHAR}
         </if>
     </select>
     <select id="selectByNameOrId" resultMap="BaseResultMap" parameterType="java.lang.String">
@@ -56,15 +56,15 @@
         where id like  concat('%',#{key,jdbcType=VARCHAR},'%')
         or project_name like  concat('%',#{key,jdbcType=VARCHAR},'%')
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from project
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </delete>
     <insert id="insert" parameterType="com.legoweb.entity.Project">
     insert into project (id, project_name, status, 
       description, create_time, update_time
       )
-    values (#{id,jdbcType=INTEGER}, #{projectName,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
       #{description,jdbcType=VARCHAR}, now(),now()
       )
   </insert>
@@ -92,7 +92,7 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
-                #{id,jdbcType=INTEGER},
+                #{id,jdbcType=VARCHAR},
             </if>
             <if test="projectName != null">
                 #{projectName,jdbcType=VARCHAR},
@@ -130,7 +130,7 @@
                 update_time = #{updateTime,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where id = #{id,jdbcType=INTEGER}
+        where id = #{id,jdbcType=VARCHAR}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.legoweb.entity.Project">
     update project
@@ -139,6 +139,6 @@
       description = #{description,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

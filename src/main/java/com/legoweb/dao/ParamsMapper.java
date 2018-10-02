@@ -16,6 +16,8 @@ public interface ParamsMapper {
 
     int insertSelective(Params record);
 
+    int uniqueParams(Params record);
+
 
     Params selectByPrimaryKey(Integer id);
 

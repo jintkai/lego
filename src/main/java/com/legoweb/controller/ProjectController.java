@@ -22,7 +22,7 @@ public class ProjectController {
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public Resp selectProject(@PathVariable(required = true) Integer id) {
+    public Resp selectProject(@PathVariable(required = true) String id) {
         Resp resp = new Resp();
         resp = projectService.selectByKey(id, 111);
         return resp;

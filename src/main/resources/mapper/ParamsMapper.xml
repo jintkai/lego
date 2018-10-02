@@ -4,16 +4,17 @@
     <resultMap id="BaseResultMap" type="com.legoweb.entity.Params">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="params_name" jdbcType="VARCHAR" property="paramsName"/>
-        <result column="project_id" jdbcType="INTEGER" property="projectId"/>
+        <result column="project_id" jdbcType="VARCHAR" property="projectId"/>
         <result column="description" jdbcType="VARCHAR" property="description"/>
         <result column="type" jdbcType="INTEGER" property="type"/>
         <result column="params_expression" jdbcType="VARCHAR" property="paramsExpression"/>
+        <result column="database_id" jdbcType="INTEGER" property="databaseId"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-    id, params_name, project_id, description, type, params_expression, create_time, update_time
+    id, params_name, project_id, description, type, params_expression, database_id,create_time, update_time
   </sql>
 
     <sql id="selectWhere">
@@ -29,6 +30,9 @@
             </if>
             <if test="data.paramsExpression!=null">
                 and params_expression LIKE concat('%',#{data.paramsExpression,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="data.databaseId!=null">
+                and database_id LIKE concat('%',#{data.databaseId,jdbcType=INTEGER},'%')
             </if>
             <if test="data.type!=null">
                 and type = #{data.type,jdbcType=VARCHAR}
@@ -49,6 +53,15 @@
         where 1 =1
         <include refid="selectWhere"></include>
     </select>
+    <select id="uniqueParams" resultType="java.lang.Integer" parameterType="com.legoweb.entity.Params">
+        select count(1) from params where params_name = #{paramsName,jdbcType=VARCHAR}
+        <if test="id!=null">
+            and id != #{id,jdbcType=INTEGER}
+        </if>
+        <if test="projectId!=null">
+            and project_id = #{projectId,jdbcType=INTEGER}
+        </if>
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from params
     where id = #{id,jdbcType=INTEGER}
@@ -57,11 +70,12 @@
     <insert id="insert" parameterType="com.legoweb.entity.Params"
             keyProperty="id">
     insert into params (id, params_name, project_id, 
-      description, type, params_expression, 
+      description, type, params_expression, database_id,
       create_time, update_time)
-    values (#{id,jdbcType=INTEGER}, #{paramsName,jdbcType=VARCHAR}, #{projectId,jdbcType=INTEGER}, 
-      #{description,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{paramsExpression,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    values (#{id,jdbcType=INTEGER}, #{paramsName,jdbcType=VARCHAR}, #{projectId,jdbcType=VARCHAR},
+      #{description,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{paramsExpression,jdbcType=VARCHAR},
+       #{databaseId,jdbcType=INTEGER},
+      now(), now())
   </insert>
     <insert id="insertSelective" parameterType="com.legoweb.entity.Params">
         insert into params
@@ -99,7 +113,7 @@
                 #{paramsName,jdbcType=VARCHAR},
             </if>
             <if test="projectId != null">
-                #{projectId,jdbcType=INTEGER},
+                #{projectId,jdbcType=VARCHAR},
             </if>
             <if test="description != null">
                 #{description,jdbcType=VARCHAR},
@@ -126,7 +140,7 @@
                 params_name = #{paramsName,jdbcType=VARCHAR},
             </if>
             <if test="projectId != null">
-                project_id = #{projectId,jdbcType=INTEGER},
+                project_id = #{projectId,jdbcType=VARCHAR},
             </if>
             <if test="description != null">
                 description = #{description,jdbcType=VARCHAR},
@@ -149,7 +163,7 @@
     <update id="updateByPrimaryKey" parameterType="com.legoweb.entity.Params">
     update params
     set params_name = #{paramsName,jdbcType=VARCHAR},
-      project_id = #{projectId,jdbcType=INTEGER},
+      project_id = #{projectId,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
       type = #{type,jdbcType=INTEGER},
       params_expression = #{paramsExpression,jdbcType=VARCHAR},

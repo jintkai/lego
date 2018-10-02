@@ -9,7 +9,7 @@
         <result column="db_user" jdbcType="VARCHAR" property="dbUser"/>
         <result column="db_password" jdbcType="VARCHAR" property="dbPassword"/>
         <result column="db_description" jdbcType="VARCHAR" property="dbDescription"/>
-        <result column="project_id" jdbcType="INTEGER" property="projectId"/>
+        <result column="project_id" jdbcType="VARCHAR" property="projectId"/>
         <result column="project_Name" jdbcType="VARCHAR" property="projectName"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
@@ -36,7 +36,7 @@
                 and db_user LIKE concat('%',#{data.dbUser,jdbcType=VARCHAR},'%')
             </if>
             <if test="data.projectId!=null">
-                and project_id LIKE concat('%',#{data.projectId,jdbcType=INTEGER},'%')
+                and project_id LIKE concat('%',#{data.projectId,jdbcType=VARCHAR},'%')
             </if>
         </if>
     </sql>
@@ -62,7 +62,7 @@
       db_password, db_description, project_id, db_type,db_url,
       create_time, update_time)
     values (#{id,jdbcType=INTEGER}, #{dbName,jdbcType=VARCHAR}, #{dbUser,jdbcType=VARCHAR}, 
-      #{dbPassword,jdbcType=VARCHAR}, #{dbDescription,jdbcType=VARCHAR}, #{projectId,jdbcType=INTEGER},
+      #{dbPassword,jdbcType=VARCHAR}, #{dbDescription,jdbcType=VARCHAR}, #{projectId,jdbcType=VARCHAR},
       #{dbType,jdbcType=VARCHAR},#{dbUrl,jdbcType=VARCHAR},
       now(),now())
   </insert>
@@ -111,7 +111,7 @@
                 #{dbDescription,jdbcType=VARCHAR},
             </if>
             <if test="projectId != null">
-                #{projectId,jdbcType=INTEGER},
+                #{projectId,jdbcType=VARCHAR},
             </if>
             <if test="createTime != null">
                 #{createTime,jdbcType=TIMESTAMP},
@@ -137,7 +137,7 @@
                 db_description = #{dbDescription,jdbcType=VARCHAR},
             </if>
             <if test="projectId != null">
-                project_id = #{projectId,jdbcType=INTEGER},
+                project_id = #{projectId,jdbcType=VARCHAR},
             </if>
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -154,7 +154,7 @@
       db_user = #{dbUser,jdbcType=VARCHAR},
       db_password = #{dbPassword,jdbcType=VARCHAR},
       db_description = #{dbDescription,jdbcType=VARCHAR},
-      project_id = #{projectId,jdbcType=INTEGER},
+      project_id = #{projectId,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
