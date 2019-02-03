@@ -9,12 +9,14 @@
         <result column="type" jdbcType="INTEGER" property="type"/>
         <result column="params_expression" jdbcType="VARCHAR" property="paramsExpression"/>
         <result column="database_id" jdbcType="INTEGER" property="databaseId"/>
+        <result column="database_name" jdbcType="VARCHAR" property="databaseName"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-    id, params_name, project_id, description, type, params_expression, database_id,create_time, update_time
+    params.id, params.params_name, params.project_id, params.description, params.type, params.params_expression,
+    params.database_id,params.create_time, params.update_time
   </sql>
 
     <sql id="selectWhere">
@@ -26,7 +28,7 @@
                 and params_name LIKE concat('%',#{data.paramsName,jdbcType=VARCHAR},'%')
             </if>
             <if test="data.projectId!=null">
-                and project_id = #{data.projectId,jdbcType=VARCHAR}
+                and params.project_id = #{data.projectId,jdbcType=VARCHAR}
             </if>
             <if test="data.paramsExpression!=null">
                 and params_expression LIKE concat('%',#{data.paramsExpression,jdbcType=VARCHAR},'%')
@@ -48,8 +50,9 @@
     </select>
     <select id="selectParams" resultMap="BaseResultMap" parameterType="com.legoweb.entity.PageCondition">
         select
-        <include refid="Base_Column_List"></include>
-        from params
+        <include refid="Base_Column_List"></include>,
+        udatabase.db_name as database_name
+        from params left join udatabase on params.database_id = udatabase.id
         where 1 =1
         <include refid="selectWhere"></include>
     </select>

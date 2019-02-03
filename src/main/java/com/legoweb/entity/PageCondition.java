@@ -9,7 +9,7 @@ public class PageCondition<T> extends PageInfo {
         return leftOffset;
     }
 
-    public void setLeftOffset(Integer leftOffset) {
+    private void setLeftOffset(Integer leftOffset) {
         this.leftOffset = leftOffset;
     }
 
@@ -18,7 +18,7 @@ public class PageCondition<T> extends PageInfo {
         return rightOffset;
     }
 
-    public void setRightOffset(Integer rightOffset) {
+    private void setRightOffset(Integer rightOffset) {
         this.rightOffset = rightOffset;
     }
 }

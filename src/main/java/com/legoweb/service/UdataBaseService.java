@@ -35,5 +35,11 @@ public class UdataBaseService {
         return resp;
     }
 
+    public Resp selectListByName(String key){
+        Resp resp;
+        resp = Resp.SuccessResp(udatabaseMapper.selectByIdOrName(key));
+        return resp;
+    }
+
 
 }

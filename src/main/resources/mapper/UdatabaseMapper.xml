@@ -53,6 +53,12 @@
         <include refid="selectWhere"></include>
         limit #{leftOffset,jdbcType=INTEGER},#{rightOffset,jdbcType=INTEGER};
     </select>
+    <select id="selectByIdOrName" resultMap="BaseResultMap" parameterType="com.legoweb.entity.Udatabase">
+        select
+        <include refid="Base_Column_List"/>
+        from udatabase where 1=1
+        <include refid="selectWhere"/>
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from udatabase
     where id = #{id,jdbcType=INTEGER}

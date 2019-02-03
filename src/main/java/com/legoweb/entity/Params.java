@@ -26,6 +26,8 @@ public class Params implements Serializable {
     @Getter @Setter
     private Integer databaseId;
     @Getter @Setter
+    private String databaseName;
+    @Getter @Setter
     private Date createTime;
     @Getter @Setter
     private Date updateTime;

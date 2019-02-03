@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.legoweb.dao.TestCaseMapper">
+  <resultMap id="BaseResultMap" type="com.legoweb.entity.TestCase">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="case_name" jdbcType="VARCHAR" property="caseName" />
+    <result column="project_id" jdbcType="VARCHAR" property="projectId" />
+    <result column="case_description" jdbcType="VARCHAR" property="caseDescription" />
+    <result column="method_type" jdbcType="INTEGER" property="methodType" />
+    <result column="case_url" jdbcType="VARCHAR" property="caseUrl" />
+    <result column="params_type" jdbcType="INTEGER" property="paramsType" />
+    <result column="case_params" jdbcType="VARCHAR" property="caseParams" />
+    <result column="case_status" jdbcType="INTEGER" property="caseStatus" />
+    <result column="service_id" jdbcType="INTEGER" property="serviceId" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, case_name, project_id, case_description, method_type, case_url, params_type, 
+    case_params, case_status, service_id, creator, create_time, update_time
+  </sql>
+  <sql id="selectWhere">
+    where 1=1
+    <if test="data != null">
+      <if test="data.id != null">
+        and id = #{data.id,jdbcType=INTEGER}
+      </if>
+      <if test="data.caseName != null">
+        and case_name like concat( '%' ,#{data.caseName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="data.caseDescription != null">
+        and case_description like concat('%',#{data.caseDescription,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="data.methodType != null">
+        and method_type = #{data.methodType,jdbcType=INTEGER}
+      </if>
+      <if test="data.caseUrl != null">
+        and case_url like ('%',#{data.caseUrl,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="data.paramsType != null">
+        and params_type  = #{data.paramsType,jdbcType=INTEGER}
+      </if>
+      <if test="data.caseParams != null">
+        and case_params like ('%',#{data.caseParams,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="data.caseStatus != null">
+        and case_status =#{data.caseStatus,jdbcType=INTEGER}
+      </if>
+      <if test="data.creator != null">
+        and creator like ('%',#{data.creator,jdbcType=VARCHAR},'%')
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from test_case
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="com.legoweb.entity.PageCondition">
+    select
+    <include refid="Base_Column_List" />
+    from test_case
+    <include refid="selectWhere" />
+    limit #{leftOffset,jdbcType=INTEGER},#{rightOffset,jdbcType=INTEGER};
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" parameterType="com.legoweb.entity.TestCase">
+    select count(1) from test_case
+    where 1=1
+    <if test="id != null">
+      and id = #{id,jdbcType=INTEGER}
+    </if>
+    <if test="caseName != null">
+      and case_name like concat( '%' ,#{caseName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="caseDescription != null">
+      and case_description like concat('%',#{caseDescription,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="methodType != null">
+      and method_type = #{methodType,jdbcType=INTEGER}
+    </if>
+    <if test="caseUrl != null">
+      and case_url like ('%',#{caseUrl,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="paramsType != null">
+      and params_type  = #{paramsType,jdbcType=INTEGER}
+    </if>
+    <if test="caseParams != null">
+      and case_params like ('%',#{caseParams,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="caseStatus != null">
+      and case_status =#{caseStatus,jdbcType=INTEGER}
+    </if>
+    <if test="creator != null">
+      and creator like ('%',#{creator,jdbcType=VARCHAR},'%')
+    </if>
+  </select>
+  <select id="uniqueCase" resultType="java.lang.Integer" parameterType="com.legoweb.entity.TestCase">
+    select count(1) from test_case
+    where case_name = #{caseName,jdbcType=VARCHAR} and project_id = #{projectId,jdbcType=VARCHAR}
+    <if test="id!=null">
+      id != #{id,jdbcType=INTEGER}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from test_case
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.legoweb.entity.TestCase">
+    insert into test_case (id, case_name, project_id, 
+      case_description, method_type, case_url, 
+      params_type, case_params, case_status, 
+      service_id, creator, create_time, 
+      update_time)
+    values (#{id,jdbcType=INTEGER}, #{caseName,jdbcType=VARCHAR}, #{projectId,jdbcType=VARCHAR},
+      #{caseDescription,jdbcType=VARCHAR}, #{methodType,jdbcType=INTEGER}, #{caseUrl,jdbcType=VARCHAR},
+      #{paramsType,jdbcType=INTEGER}, #{caseParams,jdbcType=VARCHAR}, #{caseStatus,jdbcType=INTEGER},
+      #{serviceId,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR}, now(),
+      now())
+  </insert>
+  <insert id="insertSelective" parameterType="com.legoweb.entity.TestCase">
+    insert into test_case
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="caseName != null">
+        case_name,
+      </if>
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="caseDescription != null">
+        case_description,
+      </if>
+      <if test="methodType != null">
+        method_type,
+      </if>
+      <if test="caseUrl != null">
+        case_url,
+      </if>
+      <if test="paramsType != null">
+        params_type,
+      </if>
+      <if test="caseParams != null">
+        case_params,
+      </if>
+      <if test="caseStatus != null">
+        case_status,
+      </if>
+      <if test="serviceId != null">
+        service_id,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="caseName != null">
+        #{case_name,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null">
+        #{project_id,jdbcType=VARCHAR},
+      </if>
+      <if test="caseDescription != null">
+        #{case_description,jdbcType=VARCHAR},
+      </if>
+      <if test="methodType != null">
+        #{method_type,jdbcType=INTEGER},
+      </if>
+      <if test="caseUrl != null">
+        #{case_url,jdbcType=VARCHAR},
+      </if>
+      <if test="paramsType != null">
+        #{params_type,jdbcType=INTEGER},
+      </if>
+      <if test="caseParams != null">
+        #{case_params,jdbcType=VARCHAR},
+      </if>
+      <if test="caseStatus != null">
+        #{case_status,jdbcType=INTEGER},
+      </if>
+      <if test="serviceId != null">
+        #{service_id,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{update_time,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.legoweb.entity.TestCase">
+    update test_case
+    <set>
+      <if test="case_name != null">
+        case_name = #{case_name,jdbcType=VARCHAR},
+      </if>
+      <if test="project_id != null">
+        project_id = #{project_id,jdbcType=VARCHAR},
+      </if>
+      <if test="case_description != null">
+        case_description = #{case_description,jdbcType=VARCHAR},
+      </if>
+      <if test="method_type != null">
+        method_type = #{method_type,jdbcType=INTEGER},
+      </if>
+      <if test="case_url != null">
+        case_url = #{case_url,jdbcType=VARCHAR},
+      </if>
+      <if test="params_type != null">
+        params_type = #{params_type,jdbcType=INTEGER},
+      </if>
+      <if test="case_params != null">
+        case_params = #{case_params,jdbcType=VARCHAR},
+      </if>
+      <if test="case_status != null">
+        case_status = #{case_status,jdbcType=INTEGER},
+      </if>
+      <if test="service_id != null">
+        service_id = #{service_id,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update_time != null">
+        update_time = #{update_time,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.legoweb.entity.TestCase">
+    update test_case
+    set case_name = #{case_name,jdbcType=VARCHAR},
+      project_id = #{project_id,jdbcType=VARCHAR},
+      case_description = #{case_description,jdbcType=VARCHAR},
+      method_type = #{method_type,jdbcType=INTEGER},
+      case_url = #{case_url,jdbcType=VARCHAR},
+      params_type = #{params_type,jdbcType=INTEGER},
+      case_params = #{case_params,jdbcType=VARCHAR},
+      case_status = #{case_status,jdbcType=INTEGER},
+      service_id = #{service_id,jdbcType=INTEGER},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      update_time = #{update_time,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

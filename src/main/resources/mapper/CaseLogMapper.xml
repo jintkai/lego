@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.legoweb.dao.CaseLogMapper">
+  <resultMap id="BaseResultMap" type="com.legoweb.entity.CaseLog">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="case_id" jdbcType="INTEGER" property="caseId" />
+    <result column="job_id" jdbcType="INTEGER" property="jobId" />
+    <result column="response_id" jdbcType="VARCHAR" property="responseId" />
+    <result column="assert_id" jdbcType="VARCHAR" property="assertId" />
+    <result column="assert_result" jdbcType="INTEGER" property="assertResult" />
+    <result column="case_type" jdbcType="INTEGER" property="caseType" />
+    <result column="creattime" jdbcType="TIMESTAMP" property="creattime" />
+    <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, case_id, job_id, response_id, assert_id, assert_result, case_type, creattime, 
+    updatetime
+  </sql>
+  <sql id="selectWhere">
+    where 1=1
+    <if test="data != null">
+      <if test="data.id != null">
+        and id = #{data.id,jdbcType=INTEGER}
+      </if>
+      <if test="data.caseId != null">
+        and case_id = #{data.caseId,jdbcType=INTEGER}
+      </if>
+      <if test="data.responseId != null">
+        and response_id = #{data.responseId,jdbcType=INTEGER}
+      </if>
+      <if test="data.jobId != null">
+        and job_id = #{data.jobId,jdbcType=INTEGER}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from case_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+    <select id="selectList"  resultMap="BaseResultMap" parameterType="com.legoweb.entity.PageCondition" >
+      select
+      <include refid="Base_Column_List" />
+      from case_log
+      <include refid="selectWhere" />
+      limit #{leftOffset,jdbcType=INTEGER},#{rightOffset,jdbcType=INTEGER};
+    </select>
+  <select id="selectCount" resultType="java.lang.Integer" parameterType="com.legoweb.entity.CaseLog">
+    select count(1) from case_log where 1=1
+    <if test="id != null">
+      and id = #{id,jdbcType=INTEGER}
+    </if>
+    <if test="caseId != null">
+      and case_id = #{caseId,jdbcType=INTEGER}
+    </if>
+    <if test="responseId != null">
+      and response_id = #{responseId,jdbcType=INTEGER}
+    </if>
+    <if test="jobId != null">
+      and job_id = #{jobId,jdbcType=INTEGER}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from case_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.legoweb.entity.CaseLog">
+    insert into case_log (id, case_id, job_id, 
+      response_id, assert_id, assert_result, 
+      case_type, creattime, updatetime
+      )
+    values (#{id,jdbcType=INTEGER}, #{caseId,jdbcType=INTEGER}, #{jobId,jdbcType=INTEGER}, 
+      #{responseId,jdbcType=VARCHAR}, #{assertId,jdbcType=VARCHAR}, #{assertResult,jdbcType=INTEGER}, 
+      #{caseType,jdbcType=INTEGER}, now(), now()
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.legoweb.entity.CaseLog">
+    insert into case_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="caseId != null">
+        case_id,
+      </if>
+      <if test="jobId != null">
+        job_id,
+      </if>
+      <if test="responseId != null">
+        response_id,
+      </if>
+      <if test="assertId != null">
+        assert_id,
+      </if>
+      <if test="assertResult != null">
+        assert_result,
+      </if>
+      <if test="caseType != null">
+        case_type,
+      </if>
+      <if test="creattime != null">
+        creattime,
+      </if>
+      <if test="updatetime != null">
+        updatetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="caseId != null">
+        #{caseId,jdbcType=INTEGER},
+      </if>
+      <if test="jobId != null">
+        #{jobId,jdbcType=INTEGER},
+      </if>
+      <if test="responseId != null">
+        #{responseId,jdbcType=VARCHAR},
+      </if>
+      <if test="assertId != null">
+        #{assertId,jdbcType=VARCHAR},
+      </if>
+      <if test="assertResult != null">
+        #{assertResult,jdbcType=INTEGER},
+      </if>
+      <if test="caseType != null">
+        #{caseType,jdbcType=INTEGER},
+      </if>
+      <if test="creattime != null">
+        #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByExample" parameterType="map">
+    update case_log
+    set id = #{record.id,jdbcType=INTEGER},
+      case_id = #{record.caseId,jdbcType=INTEGER},
+      job_id = #{record.jobId,jdbcType=INTEGER},
+      response_id = #{record.responseId,jdbcType=VARCHAR},
+      assert_id = #{record.assertId,jdbcType=VARCHAR},
+      assert_result = #{record.assertResult,jdbcType=INTEGER},
+      case_type = #{record.caseType,jdbcType=INTEGER},
+      creattime = #{record.creattime,jdbcType=TIMESTAMP},
+      updatetime = #{record.updatetime,jdbcType=TIMESTAMP}
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.legoweb.entity.CaseLog">
+    update case_log
+    <set>
+      <if test="caseId != null">
+        case_id = #{caseId,jdbcType=INTEGER},
+      </if>
+      <if test="jobId != null">
+        job_id = #{jobId,jdbcType=INTEGER},
+      </if>
+      <if test="responseId != null">
+        response_id = #{responseId,jdbcType=VARCHAR},
+      </if>
+      <if test="assertId != null">
+        assert_id = #{assertId,jdbcType=VARCHAR},
+      </if>
+      <if test="assertResult != null">
+        assert_result = #{assertResult,jdbcType=INTEGER},
+      </if>
+      <if test="caseType != null">
+        case_type = #{caseType,jdbcType=INTEGER},
+      </if>
+      <if test="creattime != null">
+        creattime = #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null">
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.legoweb.entity.CaseLog">
+    update case_log
+    set case_id = #{caseId,jdbcType=INTEGER},
+      job_id = #{jobId,jdbcType=INTEGER},
+      response_id = #{responseId,jdbcType=VARCHAR},
+      assert_id = #{assertId,jdbcType=VARCHAR},
+      assert_result = #{assertResult,jdbcType=INTEGER},
+      case_type = #{caseType,jdbcType=INTEGER},
+      creattime = #{creattime,jdbcType=TIMESTAMP},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

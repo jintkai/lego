@@ -26,7 +26,7 @@
             </if>
         </if>
     </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from project
@@ -53,8 +53,11 @@
         select
         <include refid="Base_Column_List"></include>
         from project
-        where id like  concat('%',#{key,jdbcType=VARCHAR},'%')
-        or project_name like  concat('%',#{key,jdbcType=VARCHAR},'%')
+        <if test="id !=null">
+            where id like concat('%',#{id,jdbcType=VARCHAR},'%')
+            or project_name like concat('%',#{id,jdbcType=VARCHAR},'%')
+
+        </if>
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from project

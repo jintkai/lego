@@ -8,8 +8,17 @@ import java.util.Date;
 
 public class Project implements Serializable {
 
-    @Getter @Setter
+
     private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Getter @Setter
     private String projectName;
     @Getter @Setter

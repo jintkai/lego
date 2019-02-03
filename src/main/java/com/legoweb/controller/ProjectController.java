@@ -15,7 +15,7 @@ public class ProjectController {
 
     @RequestMapping(method = RequestMethod.POST)
     public Resp insertProject(@RequestBody Project project) {
-        Resp resp ;
+        Resp resp;
         project.setStatus(1);
         resp = projectService.createProject(project, 111L);
         return resp;
@@ -38,11 +38,12 @@ public class ProjectController {
 
     /**
      * 根据id或者名称模糊查询项目信息
+     *
      * @param key
      * @return
      */
-    @RequestMapping(value="/vague/{key}",method=RequestMethod.GET)
-    public Resp selectByIdOrName(@PathVariable(required = true) String key){
+    @RequestMapping(value = {"/vague"}, method = RequestMethod.POST)
+    public Resp selectByIdOrName(String key) {
         Resp resp = projectService.selectByIdOrName(key);
         return resp;
     }

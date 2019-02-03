@@ -23,4 +23,6 @@ public interface UdatabaseMapper {
     int updateByPrimaryKeySelective(Udatabase record);
 
     int updateByPrimaryKey(Udatabase record);
+
+    List<Udatabase> selectByIdOrName(String id);
 }

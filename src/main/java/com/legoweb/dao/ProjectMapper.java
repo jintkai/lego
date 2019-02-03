@@ -19,7 +19,7 @@ public interface ProjectMapper {
 
     Project selectByPrimaryKey(String id);
 
-    List<Project> selectByNameOrId(String key);
+    List<Project> selectByNameOrId(@Param("id") String key);
 
     List<Project> selectProjects(PageCondition pageCondition);
     int selectCounts(PageCondition pageCondition);
